@@ -2,8 +2,8 @@ name: PromptPulse Daily Briefing
 
 on:
   schedule:
-    - cron: '0 7 * * *'   # Every day at 7:00 AM UTC (adjust to your timezone)
-  workflow_dispatch:        # Also lets you trigger it manually from GitHub
+    - cron: '0 6 * * *'   # Every day at 7:00 AM Casablanca time (UTC+1)
+  workflow_dispatch:        # Lets you trigger it manually from GitHub
 
 jobs:
   send-daily-news:
@@ -19,11 +19,12 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install anthropic requests
+        run: pip install groq requests
 
       - name: Run PromptPulse Agent
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python agent.py
