@@ -1,0 +1,29 @@
+name: PromptPulse Daily Briefing
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # Every day at 7:00 AM UTC (adjust to your timezone)
+  workflow_dispatch:        # Also lets you trigger it manually from GitHub
+
+jobs:
+  send-daily-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      - name: Run PromptPulse Agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python agent.py
